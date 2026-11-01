@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
-<script>try{if(sessionStorage.getItem('introSeen'))document.documentElement.classList.add('no-intro')}catch(e){}</script>
+<script>(function(){var h=document.documentElement;h.classList.add('js');try{if(sessionStorage.getItem('introSeen'))h.classList.add('no-intro')}catch(e){}})()</script>
 <style>
-:root{--intro:2.6s;
+:root{--intro:0s;
   --gold:#D4AF37;--gold-hi:#F1D592;--gold-lo:#9C7A1E;
   --silver:#B9BBB6;--stone:#8A8D88;
   --ink:#0b0c0e;--ink-2:#101113;--card:#16181b;
@@ -35,9 +35,10 @@ a{color:inherit}
 
 
 /* ---------- Intro / Splash ---------- */
-.no-intro{--intro:0s}
-.no-intro #intro{display:none}
-#intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;animation:introHide 0s 3s forwards}
+.js:not(.no-intro){--intro:2.6s}
+#intro{display:none}
+.js:not(.no-intro) #intro{display:grid}
+#intro{position:fixed;top:0;right:0;bottom:0;left:0;z-index:100;place-items:center;overflow:hidden;animation:introHide 0s 3s forwards}
 @keyframes introHide{to{visibility:hidden}}
 #intro .half{position:absolute;left:0;right:0;height:50.5%;background:var(--ink);animation-duration:.85s;animation-timing-function:cubic-bezier(.77,0,.18,1);animation-delay:2.1s;animation-fill-mode:forwards}
 #intro .half.top{top:0;background:radial-gradient(ellipse at 50% 100%,#1d2025,var(--ink) 75%);animation-name:slideUp}
@@ -67,10 +68,10 @@ a{color:inherit}
 @keyframes fillBar{to{transform:scaleX(1)}}
 
 /* Hero entrance (starts after the intro) */
-.hero-copy>*{opacity:0;animation:heroRise .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--intro) + var(--k,0)*.12s)}
+.hero-copy>*{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--intro) + var(--k,0)*.12s)}
 .hero-copy>:nth-child(1){--k:0}.hero-copy>:nth-child(2){--k:1}.hero-copy>:nth-child(3){--k:2}
 .hero-copy>:nth-child(4){--k:3}.hero-copy>:nth-child(5){--k:4}.hero-copy>:nth-child(6){--k:5}
-.term-wrap{opacity:0;animation:heroRise 1s calc(var(--intro) + .35s) cubic-bezier(.2,.7,.2,1) forwards}
+.term-wrap{animation:heroRise 1s calc(var(--intro) + .35s) cubic-bezier(.2,.7,.2,1) backwards}
 @keyframes heroRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 
 /* ---------- Scroll progress ---------- */
@@ -134,7 +135,7 @@ h1{font-family:var(--display);font-size:clamp(2.1rem,5vw,3.5rem);font-weight:700
 .term-bar i:nth-child(1){background:#ec6a5e}.term-bar i:nth-child(2){background:#f4bf4f}.term-bar i:nth-child(3){background:#61c554}
 .term-bar span{margin-inline-start:auto;font:500 .78rem ui-monospace,Menlo,Consolas,monospace;color:var(--stone)}
 .term-body{padding:22px 20px 26px;font:500 .9rem/2 ui-monospace,Menlo,Consolas,monospace;min-height:290px}
-.tl{opacity:0;animation:lineIn .5s forwards;display:block}
+.tl{animation:lineIn .5s backwards;display:block}
 .tl .p{color:var(--gold)}
 .tl .c{color:var(--silver)}
 .tl .e{color:var(--err)}
@@ -145,7 +146,7 @@ h1{font-family:var(--display);font-size:clamp(2.1rem,5vw,3.5rem);font-weight:700
 @keyframes lineIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 .caret{display:inline-block;width:8px;height:1.05em;vertical-align:text-bottom;background:var(--gold);animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
-.fixed-chip{position:absolute;z-index:2;bottom:-22px;inset-inline-start:-18px;display:flex;align-items:center;gap:10px;padding:10px 18px;border:1px solid rgba(95,210,138,.4);border-radius:12px;background:#12201a;color:var(--ok);font-weight:700;font-size:.95rem;box-shadow:0 14px 30px rgba(0,0,0,.45);opacity:0;animation:chipIn .6s calc(var(--intro) + 6s) forwards}
+.fixed-chip{position:absolute;z-index:2;bottom:-22px;inset-inline-start:-18px;display:flex;align-items:center;gap:10px;padding:10px 18px;border:1px solid rgba(95,210,138,.4);border-radius:12px;background:#12201a;color:var(--ok);font-weight:700;font-size:.95rem;box-shadow:0 14px 30px rgba(0,0,0,.45);animation:chipIn .6s calc(var(--intro) + 6s) backwards}
 .fixed-chip svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 @keyframes chipIn{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
 
@@ -224,8 +225,9 @@ footer{padding:44px 5% 30px;border-top:1px solid var(--line);background:linear-g
 footer .brand{justify-content:center}
 
 /* ---------- Reveal ---------- */
-.fade-in{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
-.fade-in.visible{opacity:1;transform:none}
+.fade-in{transition:opacity .8s ease,transform .8s ease}
+.js .fade-in{opacity:0;transform:translateY(24px)}
+.js .fade-in.visible{opacity:1;transform:none}
 
 /* ---------- Responsive ---------- */
 @media (max-width:960px){
@@ -259,9 +261,37 @@ footer .brand{justify-content:center}
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
   .fade-in,.tl,.fixed-chip,.hero-copy>*,.term-wrap{opacity:1;transform:none}
-  #intro{display:none}
-  :root{--intro:0s}
+  .js #intro{display:none!important}
+  .js:not(.no-intro){--intro:0s}
+  .js .fade-in{opacity:1;transform:none}
 }
+/* ================= Custom dropdown (issue type) ================= */
+.dd{position:relative}
+.dd select{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none}
+.dd-btn{display:flex;align-items:center;gap:12px;width:100%;padding:9px 14px;border:1px solid #33363b;border-radius:10px;background:#1a1c1f;color:#fff;font:600 1rem 'Cairo',sans-serif;text-align:start;cursor:pointer;transition:border-color .3s,box-shadow .3s,background .3s}
+.dd-btn:hover{border-color:rgba(212,175,55,.5)}
+.dd.open .dd-btn,.dd-btn:focus-visible{outline:none;border-color:var(--gold);background:#1e2023;box-shadow:0 0 0 3px rgba(212,175,55,.18)}
+.dd-ico{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:9px;background:rgba(212,175,55,.1);border:1px solid var(--line-soft)}
+.dd-ico svg{width:18px;height:18px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dd-val{flex:1}
+.dd-chev{flex:none;width:16px;height:16px;fill:none;stroke:var(--gold);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .35s}
+.dd.open .dd-chev{transform:rotate(180deg)}
+.dd-list{position:absolute;top:calc(100% + 8px);right:0;left:0;z-index:20;list-style:none;margin:0;padding:8px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(165deg,#1c1f23,#121315);box-shadow:0 24px 50px rgba(0,0,0,.6),0 0 30px rgba(212,175,55,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top;transition:opacity .25s,transform .25s,visibility .25s}
+.dd.up .dd-list{top:auto;bottom:calc(100% + 8px);transform-origin:bottom;transform:translateY(8px) scale(.98)}
+.dd.open .dd-list{opacity:1;visibility:visible;transform:none}
+.dd-list li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:background .2s}
+.dd.open .dd-list li{animation:ddIn .35s calc(var(--k)*.045s) both}
+@keyframes ddIn{from{opacity:0;transform:translateY(6px)}}
+.dd-list li.act{background:rgba(212,175,55,.12)}
+.dd-list li div{flex:1}
+.dd-list b{display:block;font-size:.98rem;color:#fff}
+.dd-list small{display:block;color:var(--stone);font-size:.8rem;line-height:1.5}
+.dd-list .ck{flex:none;width:18px;height:18px;fill:none;stroke:var(--gold-hi);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s}
+.dd-list li[aria-selected="true"] .ck{opacity:1;transform:none}
+.dd-list li[aria-selected="true"] .dd-ico{background:var(--gold-grad)}
+.dd-list li[aria-selected="true"] .dd-ico svg{stroke:var(--ink)}
+@media (prefers-reduced-motion:reduce){.dd.open .dd-list li{animation:none}}
+.stat strong span{font-size:inherit;color:inherit}
 </style>
 </head>
 <body>
@@ -550,6 +580,80 @@ footer .brand{justify-content:center}
       setTimeout(function(){ requestAnimationFrame(step); }, skipIntro ? 500 : 3000);
     });
   }
+
+  // قائمة منسدلة مخصصة لحقل نوع المشكلة
+  (function(){
+    var sel = document.getElementById('issue_type');
+    if (!sel) return;
+    var meta = [
+      ['<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/>', 'أعطال وأخطاء في الأنظمة والتطبيقات'],
+      ['<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 9v11"/>', 'تحديث الواجهات والهوية البصرية'],
+      ['<rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/>', 'الاستضافة والسيرفر والنطاق'],
+      ['<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 'أي مشكلة تقنية أخرى']
+    ];
+    function icon(i){ return '<span class="dd-ico"><svg viewBox="0 0 24 24" aria-hidden="true">' + meta[i % meta.length][0] + '</svg></span>'; }
+    var wrap = document.createElement('div');
+    wrap.className = 'dd';
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+    sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'dd-btn';
+    btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false');
+    var list = document.createElement('ul');
+    list.className = 'dd-list'; list.setAttribute('role', 'listbox');
+    var ck = '<svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    Array.prototype.forEach.call(sel.options, function(o, i){
+      var li = document.createElement('li');
+      li.setAttribute('role', 'option'); li.style.setProperty('--k', i);
+      li.innerHTML = icon(i) + '<div><b>' + o.text + '</b><small>' + meta[i % meta.length][1] + '</small></div>' + ck;
+      li.addEventListener('click', function(){ pick(i); close(true); });
+      li.addEventListener('pointermove', function(){ setAct(i); });
+      list.appendChild(li);
+    });
+    wrap.appendChild(btn); wrap.appendChild(list);
+    var items = list.children, act = sel.selectedIndex;
+    function render(){
+      var i = sel.selectedIndex;
+      btn.innerHTML = icon(i) + '<span class="dd-val">' + sel.options[i].text + '</span><svg class="dd-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+      Array.prototype.forEach.call(items, function(li, k){ li.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+    }
+    function setAct(i){
+      act = i;
+      Array.prototype.forEach.call(items, function(li, k){ li.classList.toggle('act', k === i); });
+    }
+    function pick(i){ sel.selectedIndex = i; sel.dispatchEvent(new Event('change', {bubbles:true})); render(); }
+    function open(){
+      var r = btn.getBoundingClientRect();
+      wrap.classList.toggle('up', window.innerHeight - r.bottom < 300 && r.top > 300);
+      wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true');
+      setAct(sel.selectedIndex);
+    }
+    function close(focus){
+      wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false');
+      if (focus) btn.focus();
+    }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); wrap.classList.contains('open') ? close() : open(); });
+    btn.addEventListener('keydown', function(e){
+      var isOpen = wrap.classList.contains('open'), n = items.length;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!isOpen) { open(); return; }
+        setAct((act + (e.key === 'ArrowDown' ? 1 : n - 1)) % n);
+      } else if (e.key === 'Home' || e.key === 'End') {
+        if (isOpen) { e.preventDefault(); setAct(e.key === 'Home' ? 0 : n - 1); }
+      } else if ((e.key === 'Enter' || e.key === ' ') && isOpen) {
+        e.preventDefault(); pick(act); close(true);
+      } else if (e.key === 'Escape' && isOpen) {
+        e.stopPropagation(); close(true);
+      } else if (e.key === 'Tab') { close(); }
+    });
+    document.addEventListener('click', function(e){ if (!wrap.contains(e.target)) close(); });
+    var lab = document.querySelector('label[for="issue_type"]');
+    if (lab) lab.addEventListener('click', function(){ btn.focus(); });
+    render();
+  })();
+
 
   // بقعة ضوء تتبع المؤشر على البطاقات
   document.querySelectorAll('.item').forEach(function(card){
